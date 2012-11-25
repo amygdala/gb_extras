@@ -1,0 +1,78 @@
+<html>
+  <head>
+      <link type="text/css" rel="stylesheet" href="/static/css/main.css" />
+      <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+      <script type="text/javascript">google.load("jquery", "1"); google.load("jqueryui", "1");</script>
+      <script
+        src="https://maps.googleapis.com/maps/api/js?sensor=false"
+        type="text/javascript"></script>
+      <script type="text/javascript" src="/static/js/StyledMarker.js"></script>
+  </head>
+  <body>
+
+  <script type="text/javascript">
+    var map;
+    var mapCenter;
+    var hostname_ = "{{app_url}}"
+  </script>
+    <script type="text/javascript" src="/static/js/mapsupport.js"></script>
+
+ <h2>Search guestbooks:</h2>
+<div id="mapbox" style="padding: 20px;border: 1px dotted #666;">
+
+       <div id="map" style="display: none; margin: 0 0 20px 20px;width: 650px; height: 300px;border: 1px solid #6666dd;">
+       </div>
+
+       <div>
+          <div class="clearfix">
+          <label for="query">query: </label>
+            <div class="input">
+             <input type="text" size="80" id="query" name="query" />
+            </div>
+          <label for="distance">distance: </label>
+            <div class="input">
+             <input type="text" id="distance" value="100" name="distance"/>&nbsp; units:
+             <select id="units" name="units">
+              <option value="km">km</option>
+              <option value="miles">miles</option>
+             </select>
+            </div>
+          </div>
+          <div class="actions">
+          <input class="btn primary" id="locate" name="locate" type="submit"
+          value="Find people near me" onclick="findLocation();"/>
+        </div>
+        <div id="loc_results">
+        </div>
+       </div>
+    </div>
+
+
+<h2>Recent posts:</h2>
+<div id="mapbox" style="padding: 20px;border: 1px dotted #666;">
+
+    <form action="/sign" method="post">
+      <input type="hidden" value="{{guestbook_name}}" name="guestbook_name">
+      <div><textarea name="content" rows="3" cols="60"></textarea></div>
+      <div><input type="submit" name="submit" value="Sign Guestbook"> OR<br/>
+      <input type=submit value="Auto-generate rant fragment" name="autogen"></div>
+    </form>
+    <form>Guestbook name: <input value="{{guestbook_name}}" name="guestbook_name">
+    <input type="submit" value="switch"></form>
+
+    {% for greeting in greetings %}
+      {% if greeting.author %}
+        <b>{{ greeting.author.nickname() }}</b> wrote:
+      {% else %}
+        An anonymous person wrote:
+      {% endif %}
+      <blockquote>{{ greeting.content|escape }}</blockquote>
+    {% endfor %}
+
+</div>
+
+
+    <a href="{{ url }}">{{ url_linktext }}</a>
+
+  </body>
+</html>
