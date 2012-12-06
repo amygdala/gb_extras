@@ -93,11 +93,10 @@ class GuestbookPost(webapp2.RequestHandler):
       # get a random article id, then get the article corresponding to the id.
       item_num = str(random.randrange(int(first), int(last)))
       _, items = s.xover(item_num, item_num)
-      for (article_id, _, _, _, _, _,
-           _, _) in items:
+      for (article_id, _, _, _, _, _, _, _) in items:
         _, _, _, text = s.article(article_id)
         snippet = text[-7:-4]  # grab some text towards the end of the article
-        # build a string form the article text-- quick-and-dirty content
+        # build a string from the article text-- quick-and-dirty content
         # generation.
         dtext = ' '.join(snippet)
         try:
@@ -114,10 +113,12 @@ class GuestbookPost(webapp2.RequestHandler):
     """This handler is called when the guestbook entry form is submitted."""
     guestbook_name = self.request.get('guestbook_name').strip()
     content = self.request.get('content')
+
     # if the user requested auto-generated content
     if self.request.get('autogen'):
       # then grab some content from a random newsgroup post
       content = self.get_content_snippet()
+
     # We set the parent key on each 'Greeting' to ensure each guestbook's
     # greetings are in the same entity group.
     greeting = models.Greeting(
